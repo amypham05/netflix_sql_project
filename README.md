@@ -52,3 +52,4 @@ FROM netflix
 GROUP BY 1;
 ```
 
+**Objectives: ** Determine the distribution of content types on Netflix.
