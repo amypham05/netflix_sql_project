@@ -111,7 +111,181 @@ LIMIT 5;
 
 **Objectives:** Identify the top 5 countries with the highest number of content items.
 
+### 5. Identify the Longest Movie
 
+```sql
+SELECT 
+    *
+FROM netflix
+WHERE type = 'Movie'
+ORDER BY SPLIT_PART(duration, ' ', 1)::INT DESC;
+```
+
+**Objectives:** Find the movie with the longest duration.
+
+### 6. Find Content Added in the Last 5 Years
+
+```sql
+SELECT *
+FROM netflix
+WHERE TO_DATE(date_added, 'Month DD, YYYY') >= CURRENT_DATE - INTERVAL '5 years';
+```
+
+**Objectives:** Retrieve content added to Netflix in the last 5 years.
+
+### 7. Find All Movies/TV Shows by Director 'Rajiv Chilaka'
+
+```sql
+SELECT *
+FROM (
+    SELECT 
+        *,
+        UNNEST(STRING_TO_ARRAY(director, ',')) AS director_name
+    FROM netflix
+) AS t
+WHERE director_name = 'Rajiv Chilaka';
+```
+
+**Objectives:** List all content directed by 'Rajiv Chilaka'.
+
+### 8. List All TV Shows with More Than 5 Seasons
+
+```sql
+SELECT *
+FROM netflix
+WHERE type = 'TV Show'
+  AND SPLIT_PART(duration, ' ', 1)::INT > 5;
+```
+
+**Objectives:** Identify TV shows with more than 5 seasons.
+
+### 9. Count the Number of Content Items in Each Genre
+
+```sql
+SELECT 
+    UNNEST(STRING_TO_ARRAY(listed_in, ',')) AS genre,
+    COUNT(*) AS total_content
+FROM netflix
+GROUP BY 1;
+```
+
+**Objectives:** Count the number of content items in each genre.
+
+### 10. Find each year and the average numbers of content release in India on netflix - return top 5 year with highest avg content release!
+
+```sql
+SELECT 
+    country,
+    release_year,
+    COUNT(show_id) AS total_release,
+    ROUND(
+        COUNT(show_id)::numeric /
+        (SELECT COUNT(show_id) FROM netflix WHERE country = 'India')::numeric * 100, 2
+    ) AS avg_release
+FROM netflix
+WHERE country = 'India'
+GROUP BY country, release_year
+ORDER BY avg_release DESC
+LIMIT 5;
+```
+
+**Objectives:** Calculate and rank years by the average number of content releases by India.
+
+### 11. List All Movies that are Documentaries
+
+```sql
+SELECT * 
+FROM netflix
+WHERE listed_in LIKE '%Documentaries';
+```
+
+**Objectives:** Retrieve all movies classified as documentaries.
+
+### 12. Find All Content Without a Director
+
+```sql
+SELECT * 
+FROM netflix
+WHERE director IS NULL;
+```
+
+**Objectives:** List content that does not have a director.
+
+### 13. Find How Many Movies Actor 'Salman Khan' Appeared in the Last 10 Years
+
+```sql
+SELECT * 
+FROM netflix
+WHERE casts LIKE '%Salman Khan%'
+AND release_year > EXTRACT(YEAR FROM CURRENT_DATE) - 10;
+```
+
+**Objectives:** Count the number of movies featuring 'Salman Khan' in the last 10 years.
+
+### 14. Find the Top 10 Actors Who Have Appeared in the Highest Number of Movies Produced in India
+
+```sql
+SELECT 
+    UNNEST(STRING_TO_ARRAY(casts, ',')) AS actor,
+    COUNT(*)
+FROM netflix
+WHERE country = 'India'
+GROUP BY actor
+ORDER BY COUNT(*) DESC
+LIMIT 10;
+```
+
+**Objectives:** Identify the top 10 actors with the most appearances in Indian-produced movies.
+
+### 15. Categorize Content Based on the Presence of 'Kill' and 'Violence' Keywords
+
+```sql
+SELECT 
+    category,
+    COUNT(*) AS content_count
+FROM (
+    SELECT 
+        CASE 
+            WHEN description ILIKE '%kill%' OR description ILIKE '%violence%' THEN 'Bad'
+            ELSE 'Good'
+        END AS category
+    FROM netflix
+) AS categorized_content
+GROUP BY category;
+```
+
+**Objectives:** Categorize content as 'Bad' if it contains 'kill' or 'violence' and 'Good' otherwise. Count the number of items in each category.
+
+## ## Findings and Conclusion
+
+### Content Mix
+Netflix offers more movies than TV shows, suggesting a focus on short-form, casual viewing experiences that appeal to a global audience.
+
+### Audience Targeting
+The most common content ratings are PG-13 and TV-MA, indicating Netflix’s strategy to engage both younger and adult viewers.
+
+### Regional Insights
+The U.S., India, and the U.K. lead in content production. India's rising contribution reflects Netflix’s ongoing investment in regional markets.
+
+### Genre Trends
+Genres such as Documentaries, Dramas, and Comedies dominate the catalog, showcasing efforts to cater to diverse viewer preferences.
+
+### Recent Additions
+A large portion of the content was added within the last five years, underscoring Netflix’s commitment to maintaining a fresh and relevant library.
+
+### Content Categorization
+By analyzing keywords like "kill" and "violence," content can be grouped and classified effectively, enhancing recommendation algorithms and viewer safety.
+
+---
+
+## Conclusion
+
+This analysis provides actionable insights into Netflix’s content strategies. It reveals a strong emphasis on:
+- Casual and accessible entertainment
+- Genre diversity
+- Regional market expansion
+
+These findings can guide improvements in content curation, targeted marketing, and user experience, ultimately driving higher engagement and satisfaction.
 
 
 
