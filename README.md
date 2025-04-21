@@ -256,7 +256,7 @@ GROUP BY category;
 
 **Objectives:** Categorize content as 'Bad' if it contains 'kill' or 'violence' and 'Good' otherwise. Count the number of items in each category.
 
-## ## Findings and Conclusion
+## Findings and Conclusion
 
 ### Content Mix
 Netflix offers more movies than TV shows, suggesting a focus on short-form, casual viewing experiences that appeal to a global audience.
