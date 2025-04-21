@@ -17,7 +17,7 @@ This project provides an in-depth analysis of Netflix's movies and TV shows usin
 
 ## Dataset
 
-The data used in this analysis is sourced from the [Kaggle Netflix Dataset](https://www.kaggle.com/datasets/rounakbanik/netflix-shows).
+The data used in this analysis is sourced from the [Kaggle Netflix Dataset](https://www.kaggle.com/datasets/shivamb/netflix-shows).
 
 ### Schema
 
@@ -38,3 +38,5 @@ CREATE TABLE netflix
     listed_in    VARCHAR(250),
     description  VARCHAR(550)
 );
+
+### Business Problems and SQL Solutions
